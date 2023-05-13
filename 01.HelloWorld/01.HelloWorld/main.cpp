@@ -12,8 +12,9 @@ int main()
 	std::cout << "Hello World!" << std::endl;
 	std::cout << "--------------------" << std::endl;
 
-	LogInit();
-	Log("Hello World!");
+	int x = 5;
+	if (x == 5)
+		std::cout << "Hello World!" << std::endl;
 
 	std::cin.get();
 }
