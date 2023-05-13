@@ -7,30 +7,31 @@ void Log(const char* message)
 	std::cout << message << std::endl;
 }
 
+void Increment(int value)
+{
+	value++;
+}
+
+void RefIncrement(int& value)
+{
+	value++;
+}
+
 int main()
 {
 	std::cout << "Hello World!" << std::endl;
 	std::cout << "--------------------" << std::endl;
 
-	int var = 8;
+	int a = 5;
+	int& ref_a = a;
 
-	void* ptr = 0; // 表示空指针,0对于内存地址是无效的
-	ptr = NULL;
-	ptr = nullptr;
+	ref_a = 2;
 
-	ptr = &var;
+	Increment(a);
+	std::cout << a << std::endl;
 
-	int* ptr_a = &var;
-
-	*ptr_a = 10;
-
-	std::cout << *ptr_a << std::endl;
-	std::cout << var << std::endl;
-
-	char* buffer = new char[8];
-	memset(buffer, 0, 8);
-
-	delete[] buffer;
+	RefIncrement(a);
+	std::cout << a << std::endl;
 
 	std::cin.get();
 }
