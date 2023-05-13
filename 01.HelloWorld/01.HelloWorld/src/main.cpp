@@ -12,34 +12,25 @@ int main()
 	std::cout << "Hello World!" << std::endl;
 	std::cout << "--------------------" << std::endl;
 
-	for (unsigned int i = 0; i < 5; i++)
-	{
-		if (i % 2 == 0)
-			continue;
+	int var = 8;
 
-		Log("Hello World!");
-		std::cout << i << std::endl;
-	}
+	void* ptr = 0; // 表示空指针,0对于内存地址是无效的
+	ptr = NULL;
+	ptr = nullptr;
 
-	std::cout << "--------------------" << std::endl;
+	ptr = &var;
 
-	for (unsigned int i = 0; i < 5; i++)
-	{
-		if (i > 2)
-			break;
+	int* ptr_a = &var;
 
-		Log("Hello World!");
-	}
+	*ptr_a = 10;
 
-	std::cout << "--------------------" << std::endl;
+	std::cout << *ptr_a << std::endl;
+	std::cout << var << std::endl;
 
-	for (unsigned int i = 0; i < 5; i++)
-	{
-		if (i > 2)
-			return 0;
+	char* buffer = new char[8];
+	memset(buffer, 0, 8);
 
-		Log("Hello World!");
-	}
+	delete[] buffer;
 
 	std::cin.get();
 }
