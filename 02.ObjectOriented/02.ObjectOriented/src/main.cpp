@@ -15,6 +15,17 @@ public:
 	}
 };
 
+struct Vector2
+{
+	int x, y;
+
+	void Add(Vector2 other)
+	{
+		x += other.x;
+		y += other.y;
+	}
+};
+
 int main()
 {
 	LOG("Hello World!");
