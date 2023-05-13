@@ -1,8 +1,10 @@
 #include <iostream>
+#include "other.h"
+#include "Log.h"
 
-void MultiplyAndLog(int a, int b)
+void Log(const char* message)
 {
-	std::cout << a * b << std::endl;
+	std::cout << message << std::endl;
 }
 
 int main()
@@ -10,9 +12,8 @@ int main()
 	std::cout << "Hello World!" << std::endl;
 	std::cout << "--------------------" << std::endl;
 
-	MultiplyAndLog(2, 8);
-	MultiplyAndLog(4, 9);
-	MultiplyAndLog(52,66);
+	LogInit();
+	Log("Hello World!");
 
 	std::cin.get();
 }
