@@ -14,22 +14,32 @@ int main()
 
 	for (unsigned int i = 0; i < 5; i++)
 	{
+		if (i % 2 == 0)
+			continue;
+
+		Log("Hello World!");
+		std::cout << i << std::endl;
+	}
+
+	std::cout << "--------------------" << std::endl;
+
+	for (unsigned int i = 0; i < 5; i++)
+	{
+		if (i > 2)
+			break;
+
 		Log("Hello World!");
 	}
 
-	unsigned int i = 0;
+	std::cout << "--------------------" << std::endl;
 
-	while (i < 5)
+	for (unsigned int i = 0; i < 5; i++)
 	{
+		if (i > 2)
+			return 0;
+
 		Log("Hello World!");
-		i++;
 	}
-
-	do
-	{
-		Log("Hello World!");
-		i++;
-	} while (i < 5);
 
 	std::cin.get();
 }
