@@ -3,21 +3,27 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-class Entity
+class Printable
 {
 public:
-	virtual std::string GetName() { return "Cherno"; }
+	virtual std::string GetClassName() = 0;
+};
+
+class Entity : public Printable
+{
+public:
+	std::string GetClassName() override { return "Entity"; }
 };
 
 class Player : public Entity
 {
 public:
-	std::string GetName() override { return "Player"; }
+	std::string GetClassName() override { return "Player"; }
 };
 
-void PrintName(Entity* entity)
+void PrintName(Printable* p)
 {
-	LOG(entity->GetName());
+	LOG(p->GetClassName());
 }
 
 int main()
@@ -25,10 +31,10 @@ int main()
 	LOG("Hello World!");
 	LOG("---------------");
 
-	Entity* e = new Entity();
-	PrintName(e);
+	Printable* e = new Entity();
+	Printable* p = new Player();
 
-	Player* p = new Player();
+	PrintName(e);
 	PrintName(p);
 
 	std::cin.get();
