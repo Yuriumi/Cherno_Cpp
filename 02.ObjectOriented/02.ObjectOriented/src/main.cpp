@@ -2,9 +2,23 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-enum Example : unsigned int
+class Entity
 {
-	A, B, C
+public:
+	float x, y;
+
+	Entity(){}
+
+	Entity(float x, float y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+
+	void Print()
+	{
+		LOG(x << "," << y);
+	}
 };
 
 int main()
@@ -12,12 +26,9 @@ int main()
 	LOG("Hello World!");
 	LOG("---------------");
 
-	Example value = B;
-
-	if (value == B)
-	{
-		// Do something here
-	}
+	Entity e;
+	LOG(e.x << "," << e.y);
+	e.Print();
 
 	std::cin.get();
 }
