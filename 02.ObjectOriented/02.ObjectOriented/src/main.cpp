@@ -2,27 +2,38 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-class Player // 一个类不标明可访问性时,默认为私有
+class Log
 {
 public:
-	int x, y;
-	int speed;
+	const int LogLevelError = 0;
+	const int LogLevelWarning = 1;
+	const int LogLevelInfo = 2;
 
-	void Move(int xa, int ya)
+private:
+	int m_LogLevel = LogLevelInfo;
+
+public:
+	void SetLevel(int level)
 	{
-		x += xa * speed;
-		y += ya * speed;
+		m_LogLevel = level;
 	}
-};
 
-struct Vector2
-{
-	int x, y;
-
-	void Add(Vector2 other)
+	void Error(const char* message)
 	{
-		x += other.x;
-		y += other.y;
+		if (m_LogLevel >= LogLevelError)
+			LOG("[ERROR]: " << message);
+	}
+
+	void Warn(const char* message)
+	{
+		if (m_LogLevel >= LogLevelWarning)
+			LOG("[WARNING]: " << message);
+	}
+
+	void Info(const char* message)
+	{
+		if (m_LogLevel >= LogLevelInfo)
+			LOG("[INFO]: " << message);
 	}
 };
 
@@ -31,12 +42,11 @@ int main()
 	LOG("Hello World!");
 	LOG("---------------");
 
-	Player player01;
-	player01.x = 0;
-	player01.y = 0;
-	player01.speed = 10;
-
-	player01.Move(1, 1);
+	Log log;
+	log.SetLevel(log.LogLevelWarning);
+	log.Error("Hello!");
+	log.Warn("Hello!");
+	log.Info("Hello!");
 
 	std::cin.get();
 }
