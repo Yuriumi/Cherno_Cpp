@@ -15,20 +15,30 @@ public:
 		this->y = y;
 	}
 
+	~Entity()
+	{
+		LOG("Destory Entity");
+	}
+
 	void Print()
 	{
 		LOG(x << "," << y);
 	}
 };
 
+void Function()
+{
+	Entity e;
+	LOG(e.x << "," << e.y);
+	e.Print();
+}
+
 int main()
 {
 	LOG("Hello World!");
 	LOG("---------------");
 
-	Entity e;
-	LOG(e.x << "," << e.y);
-	e.Print();
+	Function();
 
 	std::cin.get();
 }
