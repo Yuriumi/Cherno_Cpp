@@ -2,44 +2,44 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-int s_Variable;
+// 不适用局部静态
+//class Singleton
+//{
+//private:
+//	static Singleton* s_Instance;
+//public:
+//	static Singleton& Get() { return *s_Instance; }
+//};
+//
+//Singleton* Singleton::s_Instance = nullptr;
 
-struct Entity
+class Singleton
 {
-	static int x;
-	int y{5};
-
-	void Print()
+public:
+	static Singleton& Get()
 	{
-		LOG(x);
-	}
-
-	static void PrintHello(Entity e)
-	{
-		LOG("Hello!" << e.y);
+		static Singleton instance;
+		return instance;
 	}
 };
 
-//static void PrintHello()
-//{
-//	LOG("Hello!");
-//}
-
-int Entity::x;
+void Function()
+{
+	static int i = 0;
+	i++;
+	LOG(i);
+}
 
 int main()
 {
 	LOG("Hello World!");
 	LOG("---------------");
 
-	Entity e;
-	e.x = 2;
-
-	Entity::x = 5;
-
-	e.Print();
-
-	Entity::PrintHello(e);
+	Function();
+	Function();
+	Function();
+	Function();
+	Function();
 
 	std::cin.get();
 }
