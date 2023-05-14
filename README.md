@@ -711,3 +711,49 @@ Entity() = delete;
 !!!warning
     **析构函数没有参数列表,不能被重载**,因此一个类只有一个析构函数.
     不显式的定义析构函数系统会调用默认析构函数
+
+## 继承
+
+- 子类包含父类的一切
+- 子类是父类的派生类,在子类中我们可以扩充新的变量与函数成员.
+- 子类不论是父类的privtae,public,protected都会继承;需要注意的是:在子类的各个成员函数中,不能访问父类的private成员.
+
+继承的格式
+
+``` cpp
+class 派生类名 : public 基类名
+{
+
+};
+```
+
+``` cpp {.line-numbers}
+class Entity
+{
+public:
+    float X, Y;
+
+    void Move(float Xa, float Ya)
+    {
+        X += Xa;
+        Y += Ya;
+    }
+};
+
+class Player : public Entity
+{
+public:
+    const char* Name;
+
+    void PrintName()
+    {
+        LOG(Name);
+    }
+};
+```
+
+在上述例子中
+
+- Player类不仅仅是Player类,他同时也是Entity类.,也就是说**它同时是两种类型**,我们可以在任何使用Entity的地方将其替换为Player.
+- Player总是是Entity的超集.
+

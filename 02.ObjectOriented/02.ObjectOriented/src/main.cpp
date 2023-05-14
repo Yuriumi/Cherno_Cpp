@@ -5,40 +5,32 @@
 class Entity
 {
 public:
-	float x, y;
+	float X, Y;
 
-	Entity(){}
-
-	Entity(float x, float y)
+	void Move(float Xa, float Ya)
 	{
-		this->x = x;
-		this->y = y;
-	}
-
-	~Entity()
-	{
-		LOG("Destory Entity");
-	}
-
-	void Print()
-	{
-		LOG(x << "," << y);
+		X += Xa;
+		Y += Ya;
 	}
 };
 
-void Function()
+class Player : public Entity
 {
-	Entity e;
-	LOG(e.x << "," << e.y);
-	e.Print();
-}
+public:
+	const char* Name;
+
+	void PrintName()
+	{
+		LOG(Name);
+	}
+};
 
 int main()
 {
 	LOG("Hello World!");
 	LOG("---------------");
 
-	Function();
+	
 
 	std::cin.get();
 }
