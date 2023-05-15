@@ -48,11 +48,15 @@ public:
 
 int main()
 {
-	Entity e0;
-	//e0.PrintName();
+	int player_Level = 2;
+	std::string game_Rank;
 
-	Entity e1("Cherno");
-	//e1.PrintName();
+	if (player_Level > 1)
+		game_Rank = "Master";
+	else
+		game_Rank = "Beginner";
+
+	game_Rank = player_Level > 1 ? "Master" : "Beginner";
 
 	std::cin.get();
 }
