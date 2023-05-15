@@ -22,15 +22,58 @@ public:
 	{}
 };
 
+struct Vector2
+{
+	float x, y;
+
+	Vector2(float x, float y)
+		: x(x), y(y) {}
+
+	Vector2 Add(const Vector2& other) const
+	{
+		return Vector2(x + other.x, y + other.y);
+	}
+
+	Vector2 operator+(const Vector2& other) const
+	{
+		return Add(other);
+	}
+
+	Vector2 Multiply(const Vector2& other) const
+	{
+		return Vector2(x * other.x, y * other.y);
+	}
+
+	Vector2 operator*(const Vector2& other) const
+	{
+		return Multiply(other);
+	}
+
+	bool operator==(const Vector2& other)
+	{
+		return x == other.x && y == other.y;
+	}
+
+	bool operator!=(const Vector2& other)
+	{
+		return !(*this == other);
+	}
+};
+
+std::ostream& operator<<(std::ostream& stream, const Vector2& other)
+{
+	stream << other.x << ',' << other.y;
+	return stream;
+}
+
 int main()
 {
-	Entity entity_1(22);
-	Entity entity_2 = 22;
+	Vector2 position(0.0f, 0.0f);
+	Vector2 speed(0.7f, 0.7f);
+	Vector2 powerUp(1.0f, 1.0f);
 
-	Entity entity_a("cherno");
-	// Entity entity_b = "cherno";	ERROR : 隐式转换只能进行一次
-	Entity entity_b = std::string("cherno");
+	Vector2 result1 = position.Add(speed.Multiply(powerUp));
+	Vector2 result2 = position + speed * powerUp;
 
-	Entity e1(true);
-	// Entity e2 = "114514";
+	std::cout << result2 << std::endl;
 }

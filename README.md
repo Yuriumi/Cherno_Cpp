@@ -1409,3 +1409,99 @@ int main()
     Entity e2 = "114514"; // ERROR : explicit关键字禁止了隐式转换
 }
 ```
+
+## 运算符极其重载
+
+操作符的本质是函数;他代替操作符来帮助我们来执行一些操作.
+
+运算符的重载允许我们重新定义操作符的行为.
+
+!!!tip
+    应该尽量少的使用运算符的重载,只在它非常有意义的时候使用.
+
+接下来我们将使用向量(Vector2)来演示操作符的重载.
+
+``` cpp {.line-numebrs}
+struct Vector2
+{
+    float x, y;
+
+    Vector2(float x, float y)
+        : x(x), y(y) {}
+
+    Vector2 Add(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+        }
+
+    Vector2 operator+(const Vector2& other) const
+    {
+        return Add(other);
+    }
+
+    Vector2 Multiply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+
+    Vector2 operator*(const Vector2& other) const
+    {
+        return Multiply(other);
+    }
+};
+
+int main()
+{
+    Vector2 position(0.0f, 0.0f);
+    Vector2 speed(0.7f, 0.7f);
+    Vector2 powerUp(1.0f, 1.0f);
+
+    Vector2 result1 = position.Add(speed.Multiply(powerUp));
+    Vector2 result2 = position + speed * powerUp;
+}
+```
+
+使用操作符可以明显看得出比使用函数的方法更加直观.
+
+### 左移操作符`<<`的重载
+
+直接使用`cout`无法将我们自定义的数据打印
+
+``` cpp
+std::cout << result <<std::endl; // ERROR
+```
+
+> 左移`<<`操作符的类型为`std::ostream`.
+
+``` cpp {.line-numbers}
+// 左移操作符与Vector2没什么关系我们将他定义到结构体外
+std::ostream& operator<<(std::ostream& stream, const Vector2& other)
+{
+    stream << other.x << ',' << other.y;
+    return stream;
+}
+
+std::cout << result2 << std::endl;
+
+// 数据结果
+0.7,0.7
+```
+
+### bool操作符重载
+
+这里以`==`和`!=`为例
+
+``` cpp {.line-numbers}
+struct Vector2
+{
+    bool operator==(const Vector2& other)
+    {
+    return x == other.x && y == other.y;
+    }
+
+    bool operator!=(const Vector2& other)
+    {
+    return !(*this == other);
+    }
+};
+```
