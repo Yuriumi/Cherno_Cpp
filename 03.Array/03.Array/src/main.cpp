@@ -3,58 +3,56 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-class Entity
+class Example
 {
 private:
-	int X{ 10 }, Y{ 10 };
-	mutable int speed{ 2 };
+	std::string e_Name;
 
 public:
-	int GetX() const
+	Example()
 	{
-		speed = 0;
-		return X;
+		LOG("Creat a example" << e_Name);
 	}
-
-	void SetX(int x)
+	
+	Example(std::string name)
+		: e_Name(name)
 	{
-		X = x;
+		LOG("Creat a example " << e_Name);
 	}
 };
 
-void PrintEntity(const Entity& e)
+class Entity
 {
-	// e.Set();	ERROR
-	int temp = e.GetX();
-	LOG(temp);
-}
+private:
+	std::string m_Name;
+	Example e;
+
+public:
+	Entity()
+		: m_Name("Unknow")
+	{
+		e = Example();
+	}
+
+	Entity(std::string name)
+		: m_Name(name),e(Example("one"))
+	{
+
+	}
+
+	void PrintName()
+	{
+		LOG(m_Name);
+	}
+};
 
 int main()
 {
-	int number = 10;
-	const int MaxAge = 90;
+	Entity e0;
+	//e0.PrintName();
 
-	const int* a = new int;	// 指针指向的内存数据为常量,不可修改.
-
-	// *a = 10;
-	a = &number;
-	LOG(a);
-	a = &MaxAge;
-	LOG(a);
-
-	int* const b = new int;	// 指针指向的内存地址为常量不可修改.
-
-	LOG(b);
-	*b = 20;
-	// b = &number;
-
-	LOG(b);
-
-	LOG("-------------");
-
-	Entity e;
-
-	PrintEntity(e);
+	Entity e1("Cherno");
+	//e1.PrintName();
 
 	std::cin.get();
 }
