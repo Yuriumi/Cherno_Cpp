@@ -18,11 +18,25 @@ public:
 
 int main()
 {
-	// 栈上创建
-	Entity entity01;
-	Entity entity02("cherno");
+	int* a = new int;		// 分配4字节的空间
+	int* b = new int[50];	// 分配4 * 50字节的内存空间
 
-	// 堆上创建
-	Entity* entity03 = new Entity();
-	Entity* entity04 = new Entity("cherno");
+	delete a;
+	delete[] b;
+
+	Entity* e1 = new Entity;	// 我们不需要使用括号,因为它有默认的构造函数
+	Entity* e2 = new Entity[50];
+
+	delete e1;
+	delete[] e2;
+
+	Entity* e = new Entity();
+
+	Entity* e = (Entity*)malloc(sizeof(Entity));
+
+	delete e;
+
+	int* b = new int[50];
+
+	Entity* entity = new(b) Entity("cherno");
 }
