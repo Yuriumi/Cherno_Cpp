@@ -1014,3 +1014,52 @@ int count = sizeof(a) / sizeof(int);
 在对堆数组进行相同的方法进行计算时,实际上得到的是指针的大小.
 
 所以这个方法只适用于位于栈上的数组,但你不能永远相信这个方法.
+
+## 字符串
+
+字符串的本质是字符数组.
+
+C++中双引号`""`中的即为字符串`const char*`,使用`char*`创建字符串编译器会自动在字符串末尾添加`0`(空终止符),而`cout`遇到空终止符就会停止输出.
+
+![字符串在内存](img/memory3.jpg)
+
+红色为字符串以及对应的ASCII码,绿色为Debug模式下编译器插入守卫字符.
+
+### std::string
+
+引入`#include<string>`
+
+- C++标准库里有个类叫`string`,实际上还有一个模板类`basic_string`;`std::string`本质上就是这个`basic_string`的`char`作为模板参数的模板类实例,叫模板特化;就是把char作为模板类`basic string`的模板参数，意味着char就是每个字符背后的的数据类型
+- `string`有个参数接收char指针或者`const char`指针的构造函数.
+- `std::string`的本质就是一个`char`数组和一些内置的函数.
+
+``` cpp
+// 基本使用
+std::string name = "Cherno";
+LOG(name.size());
+```
+
+### 追加字符串.
+
+``` cpp
+// ERROR
+std::string m_name = "Cherno" + "Hello!";
+```
+
+上述案例的本质是两个字符串常量相加,常量是不可修改的,所以遍历器会报错,他们并不是真正的`string`.
+
+``` cpp
+// 解决方法 1
+std::string m_name = "Cherno";
+
+m_name += "Hello!";
+// 解决方法 2
+std::string m_name = srd::string("Cherno") + "Hello!";
+```
+
+### `string`的其他用法
+
+``` cpp
+// 查找字符串
+bool contains = m_name.find("no") != std::string::npos;
+```
