@@ -1192,3 +1192,11 @@ int GetX() const
 有的时候我们会为`Get()`方法设置两个版本;带const关键字,不带const关键字.
 
 如果想让带有const关键字的方法修改变量,可以在允许修改的变量前使用`mutable`关键字标记成员变量.
+
+## mutable关键字
+
+- 与const关键字配合使用.
+- lambda表达式.
+
+学完lambda表达式后补充
+
