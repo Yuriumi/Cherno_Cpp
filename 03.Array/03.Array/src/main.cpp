@@ -5,38 +5,56 @@
 
 class Entity
 {
-public:
-	int example[5];
+private:
+	int X{ 10 }, Y{ 10 };
+	mutable int speed{ 2 };
 
-	Entity()
+public:
+	int GetX() const
 	{
-		for (int i = 0; i < 5; i++)
-			example[i] = 2;
+		speed = 0;
+		return X;
 	}
 
-	int ArrayCount()
+	void SetX(int x)
 	{
-		return sizeof(example) / sizeof(int);
+		X = x;
 	}
 };
 
+void PrintEntity(const Entity& e)
+{
+	// e.Set();	ERROR
+	int temp = e.GetX();
+	LOG(temp);
+}
+
 int main()
 {
-	using namespace std::string_literals;
+	int number = 10;
+	const int MaxAge = 90;
 
-	const char* name_a = "cherno";
+	const int* a = new int;	// 指针指向的内存数据为常量,不可修改.
 
-	// name_a[2] = 'a';	ERROR
+	// *a = 10;
+	a = &number;
+	LOG(a);
+	a = &MaxAge;
+	LOG(a);
 
-	char name_b[] = "cherno";
+	int* const b = new int;	// 指针指向的内存地址为常量不可修改.
 
-	name_b[2] = 'a';
+	LOG(b);
+	*b = 20;
+	// b = &number;
 
-	LOG(name_b);
+	LOG(b);
 
-	std::string hello = "Hello "s + "World!";
+	LOG("-------------");
 
-	LOG(hello);
-	
+	Entity e;
+
+	PrintEntity(e);
+
 	std::cin.get();
 }
