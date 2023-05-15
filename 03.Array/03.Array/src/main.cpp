@@ -22,27 +22,21 @@ public:
 
 int main()
 {
-	const char* name_a = "Cherno";	// C风格的字符串
-	// char* name_b = "Cherno";		报错,双引号中的是字符串常量,const char*
-	char name_c[3] = {'a','b','c'};	// 无终止符
-	char name_d[4] = { 'a','b','c',0 };	// 手动添加终止符
+	using namespace std::string_literals;
 
-	LOG(name_a);
-	LOG(name_c);
-	LOG(name_d);
+	const char* name_a = "cherno";
 
-	std::string name = "Cherno";
-	LOG(name.size());
+	// name_a[2] = 'a';	ERROR
 
-	// std::string m_name = "Cherno" + "Hello!";
+	char name_b[] = "cherno";
 
-	std::string m_name = "Cherno";
+	name_b[2] = 'a';
 
-	m_name += "Hello!";
+	LOG(name_b);
 
-	bool contains = m_name.find("no") != std::string::npos;
+	std::string hello = "Hello "s + "World!";
 
-	LOG(contains);
+	LOG(hello);
 	
 	std::cin.get();
 }
