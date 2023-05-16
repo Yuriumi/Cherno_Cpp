@@ -1545,3 +1545,57 @@ public:
     }
 };
 ```
+
+## 对象生存期(栈作用域生存期)
+
+基于栈的对象在我们**离开作用域**的时候就会被摧毁,内存被释放;在堆上创建的对象只有在你**手动释放**或者**程序结束**才会被摧毁.
+
+下面演示一个典型的错误.
+
+``` cpp {.line-numbers}
+int* CreatIntArray()
+{
+    int array[50];
+    return array;
+}
+
+int main()
+{
+    int* a = CreatIntArray();
+}
+```
+
+上述案例中在栈中创建的数组在执行到函数末尾的时候内存被释放,数组变量此时已经不存在了.
+
+### 基于栈的变量的好处
+
+可以帮助我们自动化代码;最简单的例子是**作用域指针**,他基本上是一个类,是**指针的包装器**,在构造时在堆上分配指针,在析构时释放指针.
+
+对于大的对象,我们需要在堆上为其分配内存,但是同时希望在跳出作用域时释放他们;我们可以使用标准库中的`unique_ptr`指针来实现.
+
+下面案例我们将自己手动实现作用域指针.
+
+``` cpp {.line-numbers}
+class ScopePtr
+{
+private :
+    Example* m_Ptr;
+
+public:
+    ScopePtr(Example* ptr)
+    : m_Ptr(ptr){}
+
+    ~ScopePtr()
+    {
+        delete m_Ptr;
+    }
+};
+
+int main()
+{
+    {
+        ScopePtr example = new Example(1, 1);
+    }
+}
+```
+

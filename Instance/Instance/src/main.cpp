@@ -95,7 +95,33 @@ std::ostream& operator<<(std::ostream& stream, const Vector2& other)
 	return stream;
 }
 
+int* CreatIntArray()
+{
+	int array[50];
+	array[0] = 10;
+	return array;
+}
+
+class ScopePtr
+{
+private :
+	Example* m_Ptr;
+
+public:
+	ScopePtr(Example* ptr)
+		: m_Ptr(ptr){}
+
+	~ScopePtr()
+	{
+		delete m_Ptr;
+	}
+};
+
 int main()
 {
-	
+	int* a = CreatIntArray();
+
+	{
+		ScopePtr example = new Example(1, 1);
+	}
 }
