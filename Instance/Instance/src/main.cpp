@@ -1,63 +1,46 @@
 #include <iostream>
 #include <memory>
+#include <vector>
 
 #define LOG(x) std::cout << x << std::endl
-
-class Entity
-{
-private:
-	int x;
-
-public:
-	void Print()
-	{
-		LOG("Hello!");
-	}
-};
 
 struct Vector3
 {
 	int x, y, z;
-	float speed;
 };
 
-class ScopedPtr
+std::ostream& operator<< (std::ostream& stream, const Vector3& veretx)
 {
-private:
-	Entity* m_Ptr;
+	stream << veretx.x << ',' << veretx.y << ',' << veretx.z;
+	return stream;
+}
 
-public:
-	ScopedPtr(Entity* entity)
-		: m_Ptr(entity)
+void PrintArray(const std::vector<Vector3>& vertices)
+{
+	for (unsigned int i = 0; i < vertices.size(); i++)
 	{
-
+		LOG(vertices[i]);
 	}
-
-	~ScopedPtr()
-	{
-		delete m_Ptr;
-	}
-
-	Entity* operator->()
-	{
-		return m_Ptr;
-	}
-
-	const Entity* operator->() const
-	{
-		return m_Ptr;
-	}
-};
+}
 
 int main()
 {
-	ScopedPtr entity = new Entity();
+	std::vector<Vector3> vertices;
 
-	entity->Print();
+	vertices.push_back({ 1,2,3 });
+	vertices.push_back({ 4,5,6 });
+	vertices.push_back({ 7,8,9 });
 
-	int offset = (int)&(((Vector3*)nullptr)->x);
+	PrintArray(vertices);
 
-	LOG(offset);
+	vertices.erase(vertices.begin() + 1);
+
+	for (Vector3& v : vertices)
+	{
+		LOG(v);
+	}
+
+	vertices.clear();
 
 	std::cin.get();
 }

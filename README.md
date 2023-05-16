@@ -1928,3 +1928,53 @@ int offset = (int)&(((Vector3*)nullptr)->x);
 LOG(offset);
 ```
 
+## 动态数组(std::vector)
+
+vector本质上是一个动态数组,是内存连续的数组.
+
+`#incldue<vector>`
+
+使用时应该尽可能使用对象而非指针.
+
+``` cpp
+std::vector<T> a;
+```
+
+- 添加元素
+
+``` cpp {.line-numbers}
+a.push_back(element);
+
+struct Vertex
+{
+    float x ,y ,z;
+};
+
+std::vector<Vertex> vertices;
+
+vertices.push_back({1,2,3});
+vertices.push_back({4,5,6});
+vertices.push_back({7,8,9});
+```
+
+遍历`vector`
+
+``` cpp
+for(unsigned int i = 0; i < vertices.size();i++)
+{
+    std::cout << vertices[i] << std::emdl;
+}
+
+// 相当于C#语言的foreach
+
+for(Vertex& v : vertices)
+{
+    std::cout << v << std::emdl;
+}
+
+// 清除数组列表
+vertices.clear();
+
+// 删除指定元素
+vertices.erase(vertices.begin() + 1);
+```
