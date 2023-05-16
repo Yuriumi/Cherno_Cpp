@@ -1978,3 +1978,62 @@ vertices.clear();
 // 删除指定元素
 vertices.erase(vertices.begin() + 1);
 ```
+
+## sdt::vector使用优化
+
+> 动态数组的动态原理是,当数组容量不够时创建新的数组,容量至少能容得下当前数组,然后将旧的数组复制到新的数组中,删除旧数组.
+
+我们从一段案例程序进行分析
+
+``` cpp {.line-numbers}
+struct Vertex
+{
+    float x, y, z;
+
+    Vertex(float x, float y, float z)
+        : x(x), y(y), z(z)
+    {
+
+    }
+
+    Vertex(const Vertex& other)
+        : x(other.x),y(other.y),z(other.z)
+    {
+        LOG("Copyed!");
+    }
+};
+
+int main()
+{
+    std::vector<Vertex> vertices;
+    vertices.push_back(Vertex(1, 2, 3));
+    vertices.push_back(Vertex(4, 5, 6));
+    vertices.push_back({ 7, 8, 9 });
+
+    std::cin.get();
+}
+```
+
+![运行结果](img/result1.jpg)
+
+我们可以发现问题很大,拷贝初始化函数被调用了6次!,我们有很大的优化空间.
+
+1. 我们可以为动态数组设置初始容量,来减少因容量不足而导致的复制.
+
+    ``` cpp {.line-numbers}
+    // 我们在创建完动态数组后提前申请三个空间
+    vertices.reserve(3);
+    ```
+
+    ![优化1](img/result2.jpg)
+2. `vertices.push_back(Vertex(1, 2, 3));`
+
+    这个语句执行的实质是拷贝赋值,我们在`main`函数中创建`Vertex`对象初始化后,拷贝赋值到动态数组中,导致调用拷贝构造函数.
+
+    ``` cpp {.line-numbers}
+    vertices.emplace_back(1, 2, 3);
+    vertices.emplace_back(4, 5, 6);
+    vertices.emplace_back(4, 5, 6);
+    ```
+
+    我们使用`emplace_back`告诉动态数组,使用以下参数来构造对象,并存入数组,放置了拷贝构造函数的调用.
