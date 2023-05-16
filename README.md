@@ -1691,3 +1691,155 @@ int main()
     } //此时，此析构被调用，内存被释放
 }
 ```
+
+## 复制与拷贝构造函数
+
+拷贝函数使用
+
+``` cpp {.line-numbers}
+T(const T& other); // 声明
+
+T(const T& other){} // 定义
+
+T(const T& other) = delete; // 禁用
+```
+
+``` cpp
+int a{10};
+int b = a;
+b = 5;
+
+LOG(a);
+LOG(b);
+
+// 输出结果
+10
+5
+```
+
+上述案例是我们希望的复制,我们进行的仅仅是值的复制,b并不是a(复制的是内存存储的值,而不是内存地址);我们称之为**深拷贝**.
+
+``` cpp
+int* a = new int(10);
+int* b = a;
+*b = 5;
+
+LOG(*a);
+LOG(*b);
+
+delete a;
+
+// 输出结果
+5
+5
+```
+
+上述案例中,我们进行的是内存地址的复制,两个指针指向**同一块内存区域**;我们称之为浅拷贝.
+
+``` cpp {.line-numbers}
+class String
+{
+private:
+    char* m_Buffer;
+    unsigned int m_Size;
+
+public:
+    String(const char* string)
+    {
+        m_Size = strlen(string);
+        m_Buffer = new char[m_Size + 1];
+        /*for (unsigned int i = 0; i < m_Size + 1; i++)
+        {
+        m_Buffer[i] = string[i];
+        }*/
+        memcpy(m_Buffer, string, m_Size);
+        m_Buffer[m_Size] = 0;
+    }
+
+    ~String()
+    {
+        delete[] m_Buffer;
+    }
+};
+
+int main()
+{
+    String string("cherno");
+    String name = string;
+
+    std::cin.get();
+}
+```
+
+上述案例中,我们创建了一个自己的字符串类,但运行上述程序后,会发生异常;异常发生的原因是我们在复制的过程中发生了浅拷贝,在析构函数阶段发生了问题.
+
+1. 当你创建一个类时,与构造函数相同,我们会有一个默认的拷贝构造函数.他进行的是**浅拷贝**.
+2. `string`的`m_Buffer`与`name`的`m_Buffer`指向的是同一块内存地址.
+3. 但程序结束阶段调用析构函数时,首先调用`string`的析构函数,`string`的`m_Buffer`指向的内存地址被释放,随后执行`name`的析构函数,由于这两个对象的`m_Buffer`指向的是同一块内存地址,所以`name`的`m_Buffer`早己经被释放了,`delete`关键字想释放内存,但那块内存已经释放了.
+
+我们可以向最开始那样更改成员变量的值来证明复制的过程中发生了浅拷贝.
+
+``` cpp {.line_numbers}
+class String
+{
+    ...
+
+    char& operator[](const unsigned int index)
+    {
+        return m_Buffer[index];
+    }
+
+    friend std::ostream& operator<< (std::ostream& stream, const String& string);
+};
+
+std::ostream& operator<< (std::ostream& stream, const String& string)
+{
+    stream << string.m_Buffer;
+    return stream;
+}
+
+int main()
+{
+    String string("cherno");
+    String name = string;
+
+    name[2] = 'a';
+
+    LOG(string);
+    LOG(name);
+
+    std::cin.get();
+}
+// 输出结果
+charno
+charno
+```
+
+以上可以看出复制过程中确实发生的是浅拷贝,而不是深拷贝.
+
+让我们加上拷贝构造函数,让复制正确执行.
+
+``` cpp {.line-numebrs}
+class String()
+{
+    ...
+
+    String(const String& other)
+        : m_Size(other.m_Size)
+    {
+        m_Buffer = new char[m_Size + 1];
+        memcpy(m_Buffer, other.m_Buffer, m_Size + 1);
+    }
+
+}
+
+// 输出结果
+cherno
+charno
+```
+
+Cool!我们解决了问题,程序也不会报异常了.
+
+!!!tip
+    我们应该尽量(总是)用`const`引用变量.
+

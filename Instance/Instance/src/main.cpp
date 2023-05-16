@@ -1,40 +1,72 @@
 #include <iostream>
-#include <string>
 #include <memory>
 
-class Entity
+#define LOG(x) std::cout << x << std::endl
+
+class String
 {
 private:
-	const std::string m_Name;
+	char* m_Buffer;
+	unsigned int m_Size;
 
 public:
-	Entity()
-		: m_Name("Unknow")
+	String(const char* string)
 	{
-		std::cout << "Created Entity" << std::endl;
+		m_Size = strlen(string);
+		m_Buffer = new char[m_Size + 1];
+		/*for (unsigned int i = 0; i < m_Size + 1; i++)
+		{
+			m_Buffer[i] = string[i];
+		}*/
+		memcpy(m_Buffer, string, m_Size);
+		m_Buffer[m_Size] = 0;
 	}
 
-	void PrintName() const
+	String(const String& other)
+		: m_Size(other.m_Size)
 	{
-		std::cout << m_Name << std::endl;
+		m_Buffer = new char[m_Size + 1];
+		memcpy(m_Buffer, other.m_Buffer, m_Size + 1);
+		LOG("Copy");
 	}
+
+	char& operator[](const unsigned int index)
+	{
+		return m_Buffer[index];
+	}
+
+	~String()
+	{
+		delete[] m_Buffer;
+	}
+
+	friend std::ostream& operator<< (std::ostream& stream, const String& string);
 };
+
+std::ostream& operator<< (std::ostream& stream, const String& string)
+{
+	stream << string.m_Buffer;
+	return stream;
+}
 
 int main()
 {
-	{
-		// std::unique_ptr<Entity> entity_a = new Entity();	不能隐式转换
-		std::unique_ptr<Entity> entity_b(new Entity());	// 可以但不建议
-		std::unique_ptr<Entity> entity = std::make_unique<Entity>();
+#pragma region Basic Cpoy
+	/*int* a = new int(10);
+	int* b = a;
+	*b = 5;
 
-		// std::unique_ptr<Entity> e = entity;	不安全的,实际上编译器也会阻止你这么干,防止出现错误
+	LOG(*a);
+	LOG(*b);
 
-		std::shared_ptr<Entity> shareE;
-		{
-			std::shared_ptr<Entity> shareEntity_a(new Entity());	// 同样不推荐
-			std::shared_ptr<Entity> shareEntity = std::make_shared<Entity>();	// 推荐
+	delete a;*/
+#pragma endregion
 
-			shareE = shareEntity;
-		}	// shareEntity已经超出生命周期但没有调用析构函数,因为shareE还存在,引用记数不为0
-	}	// 析构被调用,shareE也超出了生命周期
+	String string("cherno");
+	String name = string;
+
+	name[2] = 'a';
+
+	LOG(string);
+	LOG(name);
 }
