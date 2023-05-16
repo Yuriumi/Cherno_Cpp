@@ -1843,3 +1843,88 @@ Cool!我们解决了问题,程序也不会报异常了.
 !!!tip
     我们应该尽量(总是)用`const`引用变量.
 
+## C++箭头操作符
+
+- 箭头运算符必须是类的成员.
+- 一般将 箭头运算符定义成`const`成员,这是因为与递增递减运算符不一样,获取一个元素并不会改变类成员的状态.
+
+### 应用场景
+
+- 用于调用成员.
+
+``` cpp {.line-numebrs}
+(*point).member;
+point->member;
+```
+
+- 重载箭头操作符
+
+我们与之前的作用域指针结合
+
+``` cpp {.line-numbers}
+class Entity
+{
+private:
+    int x;
+
+public:
+    void Print()
+    {
+        LOG("Hello!");
+    }
+};
+
+class ScopedPtr
+{
+private:
+    Entity* m_Ptr;
+
+public:
+    ScopedPtr(Entity* entity)
+        : m_Ptr(entity)
+    {
+
+    }
+
+    ~ScopedPtr()
+    {
+        delete m_Ptr;
+    }
+
+    Entity* operator->()
+    {
+        return m_Ptr;
+    }
+};
+
+int main()
+{
+    ScopedPtr entity = new Entity();
+
+    entity->Print();
+
+    std::cin.get();
+}
+```
+
+这样我们自己完成的作用域指针就更完善了.
+
+我们还可以将其改成const版本
+
+``` cpp {.line-numbers}
+const Entity* operator->() const
+{
+    return m_Ptr;
+}
+```
+
+- 用于计算成员变量的偏移量
+
+> `pointer->member`的原理实际是指针地址+成员偏移量所得到成员所在的内存地址进行访问的,所以我们将指针设为`nullptr`(0,空指针),就成为了0 + 成员偏移量.
+
+``` cpp
+int offset = (int)&(((Vector3*)nullptr)->x);
+
+LOG(offset);
+```
+

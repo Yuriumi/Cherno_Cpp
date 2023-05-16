@@ -3,70 +3,61 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-class String
+class Entity
 {
 private:
-	char* m_Buffer;
-	unsigned int m_Size;
+	int x;
 
 public:
-	String(const char* string)
+	void Print()
 	{
-		m_Size = strlen(string);
-		m_Buffer = new char[m_Size + 1];
-		/*for (unsigned int i = 0; i < m_Size + 1; i++)
-		{
-			m_Buffer[i] = string[i];
-		}*/
-		memcpy(m_Buffer, string, m_Size);
-		m_Buffer[m_Size] = 0;
+		LOG("Hello!");
 	}
-
-	String(const String& other)
-		: m_Size(other.m_Size)
-	{
-		m_Buffer = new char[m_Size + 1];
-		memcpy(m_Buffer, other.m_Buffer, m_Size + 1);
-		LOG("Copy");
-	}
-
-	char& operator[](const unsigned int index)
-	{
-		return m_Buffer[index];
-	}
-
-	~String()
-	{
-		delete[] m_Buffer;
-	}
-
-	friend std::ostream& operator<< (std::ostream& stream, const String& string);
 };
 
-std::ostream& operator<< (std::ostream& stream, const String& string)
+struct Vector3
 {
-	stream << string.m_Buffer;
-	return stream;
-}
+	int x, y, z;
+	float speed;
+};
+
+class ScopedPtr
+{
+private:
+	Entity* m_Ptr;
+
+public:
+	ScopedPtr(Entity* entity)
+		: m_Ptr(entity)
+	{
+
+	}
+
+	~ScopedPtr()
+	{
+		delete m_Ptr;
+	}
+
+	Entity* operator->()
+	{
+		return m_Ptr;
+	}
+
+	const Entity* operator->() const
+	{
+		return m_Ptr;
+	}
+};
 
 int main()
 {
-#pragma region Basic Cpoy
-	/*int* a = new int(10);
-	int* b = a;
-	*b = 5;
+	ScopedPtr entity = new Entity();
 
-	LOG(*a);
-	LOG(*b);
+	entity->Print();
 
-	delete a;*/
-#pragma endregion
+	int offset = (int)&(((Vector3*)nullptr)->x);
 
-	String string("cherno");
-	String name = string;
+	LOG(offset);
 
-	name[2] = 'a';
-
-	LOG(string);
-	LOG(name);
+	std::cin.get();
 }
