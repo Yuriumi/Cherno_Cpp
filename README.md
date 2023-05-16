@@ -1599,3 +1599,95 @@ int main()
 }
 ```
 
+## 智能指针
+
+智能指针的本质是原始指针的包装器,当你创建一个智能指针,它会调用new关键字为你分配内存,然后根据指针的不同来决定内存释放的时间.
+
+优先使用`unique_ptr`,其次考虑`share_ptr`.
+
+尽量使用`unique_ptr`,因为他的开销小的几乎可以忽略不记,但如果你需要在对象之间共享变量,记得改为`share_ptr`.
+
+### unique_ptr的使用
+
+- 使用智能指针前`#include<memory>`
+- `unique_ptr`是作用域指针
+- `unique_ptr`是**唯一的**,不可复制,不可共享.
+
+!!!warning
+    如果你复制了一个`unique_ptr`,会有两个指针,两个指针指着**相同的内存地址**,只意味着其中一个指针释放了,那么另一个也会释放.
+    ![unique_ptr](img/unique_ptr.jpg)
+
+- `unique_ptr`的构造函数实际是被`explicit`标记的,他禁止了构造函数的隐式转换
+- 最好使用`std::unique_ptr<Entity> entity = std::make_unique<Entity>();`;因为如果构造函数碰巧抛出异常,不会得到一个没有引用而悬空的指针从而造成的内存泄露,它会稍微安全一点.
+- `std::make_unique<>()`是在**C++14**中引入的,C++11并不支持.
+
+``` cpp {.line-numebrs}
+#include <memory>
+
+class Entity
+{
+private:
+    const std::string m_Name;
+
+public:
+    Entity()
+        : m_Name("Unknow")
+    {
+        std::cout << "Created Entity" << std::endl;
+    }
+
+    void PrintName() const
+    {
+        std::cout << m_Name << std::endl;
+    }
+};
+
+int main()
+{
+    {
+        // std::unique_ptr<Entity> entity_a = new Entity(); 不能隐式转换
+        std::unique_ptr<Entity> entity_b(new Entity()); // 可以但不建议
+        std::unique_ptr<Entity> entity = std::make_unique<Entity>();
+
+        std::unique_ptr<Entity> e = entity;
+    }
+}
+```
+
+### 共享指针`share_ptr`的使用
+
+`share_ptr`的原理是使用**引用计数**
+
+> 引用技术基本上是一个方法,可以跟随你的指针有多少个引用,一旦引用为0,他就会释放内存.
+
+`share_ptr`需要一块额外的内存用于存储引用记数,当你创建一个`share_ptr`时它会做两次内存分配,首先调用`new`操作符为对象分配内存,然后为引用记数分配内存.
+
+``` cpp {.line-numebrs}
+{
+    std::shared_ptr<Entity> shareE;
+    {
+        std::shared_ptr<Entity> shareEntity_a(new Entity()); // 同样不推荐
+        std::shared_ptr<Entity> shareEntity = std::make_shared<Entity>(); // 推荐
+
+        shareE = shareEntity;
+    } // shareEntity已经超出生命周期但没有调用析构函数,因为shareE还存在,引用记数不为0
+}// 析构被调用,shareE也超出了生命周期
+```
+
+### 弱指针`weak_ptr`
+
+- 可以和`share_ptr`一起使用
+
+`weak_ptr`可以被复制,但不会增加额外的控制块(内存)来控制记数,仅仅声明这个指针还"活着".
+
+当你把share_ptr付给一个weak_ptr时,他不会增加引用记数,当你不关心对象的所有权,你只想存储他的引用.
+
+``` cpp {.line-numbers}
+{
+    std::weak_ptr<Entity> e0;
+    {
+        std::shared_ptr<Entity> sharedEntity = std::make_shared<Entity>();
+        e0 = sharedEntity;
+    } //此时，此析构被调用，内存被释放
+}
+```
