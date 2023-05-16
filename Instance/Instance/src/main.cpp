@@ -22,6 +22,35 @@ public:
 	{}
 };
 
+class Example
+{
+private:
+	int x, y;
+
+public:
+	Example(int x, int y)
+	{
+		/*x = x
+		  y = y	我们实际上并没有完成初始化操作,只是将其自身的值重新赋值给自身,
+		  相当于啥也没干*/
+
+		this->x = x;
+		this->y = y;
+	}
+
+	int GetX() const
+	{
+		const Example* e = this;
+		return e->x;
+	}
+
+	void PrintExample()
+	{
+		const Example& e = *this;
+		std::cout << e.GetX() << std::endl;
+	}
+};
+
 struct Vector2
 {
 	float x, y;
@@ -68,12 +97,5 @@ std::ostream& operator<<(std::ostream& stream, const Vector2& other)
 
 int main()
 {
-	Vector2 position(0.0f, 0.0f);
-	Vector2 speed(0.7f, 0.7f);
-	Vector2 powerUp(1.0f, 1.0f);
-
-	Vector2 result1 = position.Add(speed.Multiply(powerUp));
-	Vector2 result2 = position + speed * powerUp;
-
-	std::cout << result2 << std::endl;
+	
 }
