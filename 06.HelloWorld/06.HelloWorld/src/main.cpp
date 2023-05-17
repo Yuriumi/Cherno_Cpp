@@ -4,28 +4,27 @@
 
 #define LOG(x) std::cout<< x <<std::endl
 
-template<unsigned int N>
-void PrintArray(const std::array<int, N>& m_Array)
+template<typename T>
+void Print(T t)
 {
-	/*for (auto a : m_Array)
-	{
-		LOG(a);
-	}*/
+	LOG(t);
+}
 
-	for (unsigned int i = 0; i < N; i++)
-	{
-		LOG(m_Array[i]);
-	}
+template<typename T,unsigned int N>
+void PrintArray(const std::array<int, N> m_Array, void(*print)(T t))
+{
+	for (auto a : m_Array)
+		print(a);
 }
 
 int main()
 {
-	std::array<int, 5> array_int;
+	std::array<int, 2> array_int;
+
 	array_int[0] = 0;
 	array_int[1] = 1;
-	array_int[2] = 2;
-	array_int[3] = 3;
-	array_int[4] = 4;
 
-	PrintArray<5>(array_int);
+	PrintArray<int,2>(array_int, Print);
+
+	PrintArray<int, 2>(array_int, [](int value) {LOG(value); });
 }

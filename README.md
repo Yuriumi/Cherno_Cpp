@@ -2293,3 +2293,50 @@ void PrintArray(const std::array<int, N>& m_Array)
     }
 }
 ```
+
+## 函数指针
+
+定义方式
+
+``` cpp
+returnType(*function)() = Function;
+```
+
+将函数作为参数传入另一个参数
+
+``` cpp {.line-numebrs}
+template<typename T>
+void Print(T t)
+{
+    LOG(t);
+}
+
+template<typename T,unsigned int N>
+void PrintArray(const std::array<int, N> m_Array, void(*print)(T t))
+{
+    for (auto a : m_Array)
+        print(a);
+}
+
+int main()
+{
+    std::array<int, 2> array_int;
+
+    array_int[0] = 0;
+    array_int[1] = 1;
+
+    PrintArray<int,2>(array_int, Print);
+}
+```
+
+与Lambda一起使用
+
+lambda本质是一个函数,只不过这个函数我们仅仅只是用一次,不对它进行复用,是一个匿名函数.
+
+我们使用Lambda来优化上述案例
+
+``` cpp {.line-numbers}
+PrintArray<int, 2>(array_int, [](int value) {LOG(value); });
+```
+
+我们直接省略了Print函数,使用Lambda来代替它.
