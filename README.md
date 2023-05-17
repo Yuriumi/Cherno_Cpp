@@ -2260,3 +2260,36 @@ int* value = new int(5);
 ## auto关键字
 
 无必要能不用就不用.
+
+## 静态数组(std::array)
+
+静态数组是指元素数量不会改变的数组,创建时就要为其指定数组的大小.
+
+``` cpp {.line-numbers}
+std::array<int, 5> array;
+array[0] = 0;
+array[1] = 1;
+array[2] = 2;
+array[3] = 3;
+array[4] = 4;
+```
+
+array数组与C风格的数组相同都是创建在栈上的数组.
+
+对比C风格的数组,array可以进行边界检测,而且可以访问元素个数.
+
+``` cpp {.line-numbers}
+template<unsigned int N>
+void PrintArray(const std::array<int, N>& m_Array)
+{
+    /*for (auto a : m_Array)
+    {
+        LOG(a);
+    }*/
+
+    for (unsigned int i = 0; i < N; i++)
+    {
+        LOG(m_Array[i]);
+    }
+}
+```
