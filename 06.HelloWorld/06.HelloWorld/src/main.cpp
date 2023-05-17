@@ -56,20 +56,14 @@ namespace red
 
 void SetNumber()
 {
-	using namespace red;
-
-	One one;
-	one.number1 = 1;
-	Two two;
-	two.number2 = 2;
+	LOG(t);
 }
 
-namespace apple
+template<typename T,unsigned int N>
+void PrintArray(const std::array<int, N> m_Array, const std::function <void(int)> func)
 {
-	void GetName()
-	{
-
-	}
+	for (auto a : m_Array)
+		func(a);
 }
 
 int main()
@@ -77,6 +71,6 @@ int main()
 	using namespace apple;
 	using namespace orange;
 
-	// ±àÒëÆ÷²»ÖªµÀÎÒÃÇÒªÊ¹ÓÃÄÇ¸öprint,ÓÚÊÇËûÓĞÏŞÑ¡Ôñ¿ÉÒÔÏÔÊ¾×ª»»µÄ.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÊ¹ï¿½ï¿½ï¿½Ç¸ï¿½print,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾×ªï¿½ï¿½ï¿½ï¿½.
 	print("cherno");
 }
