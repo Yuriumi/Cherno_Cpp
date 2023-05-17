@@ -6,34 +6,30 @@
 
 #define LOG(x) std::cout<< x <<std::endl
 
-template<typename T>
-void Print(T t)
+namespace apple
 {
-	LOG(t);
+	void print(const std::string& string)
+	{
+		LOG(string);
+	}
 }
 
-template<typename T,unsigned int N>
-void PrintArray(const std::array<int, N> m_Array, const std::function <void(int)> func)
+namespace orange
 {
-	for (auto a : m_Array)
-		func(a);
+	void print(const char* string)
+	{
+		std::string temp = string;
+		std::reverse(temp.begin(),temp.end());
+
+		LOG(temp);
+	}
 }
 
 int main()
 {
-	std::array<int, 2> array_int;
+	using namespace apple;
+	using namespace orange;
 
-	std::vector<int> value = { 1,5,3,4,2 };
-
-	// 我们迭代这个数组,使用我们自己定义的规则进行查找
-	auto it = std::find_if(value.begin(), value.end(), [](int value) {return value > 3; });
-
-	array_int[0] = 0;
-	array_int[1] = 1;
-
-	int a{ 10 };
-
-	// PrintArray<int,2>(array_int, Print);
-
-	PrintArray<int, 2>(array_int, [a](int value) {LOG(a); });
+	// 编译器不知道我们要使用那个print,于是他有限选择可以显示转换的.
+	print("cherno");
 }

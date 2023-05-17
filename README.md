@@ -2375,3 +2375,37 @@ std::vector<int> value = { 1,5,3,4,2 };
 
     std::cout << *it << std::endl;
 ```
+
+## 命名空间
+
+千万不要在头文件中使用`using namespace`,cpp文件中也尽量最好能不用就不用,个人认为使用命名空间就失去了命名空间的意义了,如果非要用可以在足够小的作用域中使用,例如一个函数.
+
+``` cpp {.line-numbers}
+namespace apple
+{
+    void print(const std::string& string)
+    {
+        LOG(string);
+    }
+}
+
+namespace orange
+{
+    void print(const char* string)
+    {
+        std::string temp = string;
+        std::reverse(temp.begin(),temp.end());
+
+    LOG(temp);
+    }
+}
+
+int main()
+{
+    using namespace apple;
+    using namespace orange;
+
+    // 编译器不知道我们要使用那个print,于是他有限选择可以显示转换的.
+    print("cherno");
+}
+```
