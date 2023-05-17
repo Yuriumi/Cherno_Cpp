@@ -2256,3 +2256,7 @@ int* value = new int(5);
 ![debug2](img/debug2.jpg)
 
 如上述案例一样,但我们在`Debug`模式下编译器才会处理我们的宏语句,而在`Release`模式下,编译器不会处理我们的宏语句.
+
+## auto关键字
+
+无必要能不用就不用.
