@@ -2160,3 +2160,50 @@ Entity SetBasic(const std::string& out_Name, const int& out_Age)
 }
 ```
 
+## 模板
+
+在C#中被称为泛型,可以这么理解,他们并不相同.
+
+### 模板参数
+
+``` cpp {.line-numbers}
+// 不使用模板
+void Print(const int& temp)
+{
+    LOG(temp);
+}
+
+void Print(const float& temp)
+{
+    LOG(temp);
+}
+
+void Print(const std::string& temp)
+{
+    LOG(temp);
+}
+```
+
+``` cpp {.line-numbers}
+// 使用模板
+template<typename T>
+void Print(const T& temp)
+{
+    LOG(temp);
+}
+```
+
+使用`template`关键字创建模板,模板函数(类)只有在编译时才被创建,编译器会自动评估模板的类型,**模板只有在被调用后在被实际创建**
+
+### 模板类
+
+``` cpp {.line-numbers}
+template<typename T,int N>
+class Array
+{
+private:
+    T m_array[N];
+};
+```
+
+模板千万不能滥用,否则你可能画非数倍的时间来研究和分清楚自己写的模板 到底是个什么鬼东西.
