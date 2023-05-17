@@ -2,7 +2,13 @@
 #include <string>
 #include <array>
 
+#ifdef PR_DEBUG
 #define LOG(x) std::cout<< x <<std::endl
+#else
+#define PR_DEBUG
+#endif
+
+#define WAIT std::cin.get()
 
 template<typename T>
 void Print(const T& temp)
@@ -24,4 +30,6 @@ int main()
 
 	Array<int, 5> array_int;
 	Array<float, 5> array_float;
+
+	WAIT;
 }
