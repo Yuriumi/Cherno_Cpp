@@ -2340,3 +2340,38 @@ PrintArray<int, 2>(array_int, [](int value) {LOG(value); });
 ```
 
 我们直接省略了Print函数,使用Lambda来代替它.
+
+## lambda
+
+lambda的语法格式
+
+``` cpp
+[捕获方式](参数列表){函数体}
+```
+
+> **捕获**指的是如何传递外部变量
+
+正确的使用捕获
+
+- 添加头文件`#include<functionl>`
+- 修改函数指针签名`std::function<void(int)> func`替代`void(*func)(int)`
+- 捕获[]使用
+  - `[=]`,将变量以值传递的方式传递到lambda中
+  - `[&]`,将变量以引用传递的方式传递到lambda中
+  - `[a]`,指定特定的变量传递方式
+    - `a`将变量a以值传递的方式传递
+    - `&a`将变量a以引用传递的方式传递
+    - 多个捕获用逗号分开
+
+我们有一个可选的修饰符**mutable**，它允许lambda函数体修改通过拷贝传递捕获的参数.若我们在lambda中给a赋值会报错,需要写上mutable.
+
+另一个使用lambda的场景是`find_if`
+
+``` cpp {.line-numbers}
+std::vector<int> value = { 1,5,3,4,2 };
+
+    // 我们迭代这个数组,使用我们自己定义的规则进行查找
+    auto it = std::find_if(value.begin(), value.end(), [](int value) {return value > 3; });
+
+    std::cout << *it << std::endl;
+```
