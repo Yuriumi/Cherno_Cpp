@@ -2376,7 +2376,7 @@ std::vector<int> value = { 1,5,3,4,2 };
     std::cout << *it << std::endl;
 ```
 
-## 命名空间
+## 为什么不使用using namespace
 
 千万不要在头文件中使用`using namespace`,cpp文件中也尽量最好能不用就不用,个人认为使用命名空间就失去了命名空间的意义了,如果非要用可以在足够小的作用域中使用,例如一个函数.
 
@@ -2407,5 +2407,106 @@ int main()
 
     // 编译器不知道我们要使用那个print,于是他有限选择可以显示转换的.
     print("cherno");
+}
+```
+
+## 命名空间
+
+每个命名空间都是一个作用域
+
+嵌套的命名空间
+
+``` cpp {.line-numbers}
+namespace apple
+{
+    void print(const std::string& string)
+    {
+        LOG(string);
+    }
+
+    namespace orange
+    {
+        void print(const char* string)
+        {
+            std::string temp = string;
+            std::reverse(temp.begin(), temp.end());
+
+            LOG(temp);
+        }
+    }
+}
+```
+
+内联命名空间
+
+C++引入的一种新的嵌套命名空间,`inline namespace`,内联命名空间可以被外层命名空间直接使用.
+
+``` cpp {.line-numbers}
+inline namespace apple // inline必须出现在他第一次该出现的地方
+{
+    void print(const std::string& string)
+    {
+        LOG(string);
+    }
+
+    namespace orange
+    {
+        void print(const char* string)
+        {
+            std::string temp = string;
+            std::reverse(temp.begin(), temp.end());
+
+            LOG(temp);
+        }
+    }
+}
+
+namespace apple // 可以不用写inline(隐式内联) 与上一个apple同属一一个命名空间,相当于补充
+{
+    void GetName()
+    {
+
+    }
+}
+```
+
+``` cpp {.line-numbers}
+namespace red
+{
+    inline namespace blue
+    {
+        class One
+        {
+        public:
+            int number1{10};
+        };
+    }
+
+    namespace blue
+    {
+        class Two
+        {
+        public:
+            int number2{ 20 };
+        };
+    }
+
+    void PrintNumber()
+    {
+        One one;
+        LOG(one.number1);
+        Two two;
+        LOG(two.number2);
+    }
+}
+
+void SetNumber()
+{
+    using namespace red;
+
+    One one;
+    one.number1 = 1;
+    Two two;
+    two.number2 = 2;
 }
 ```

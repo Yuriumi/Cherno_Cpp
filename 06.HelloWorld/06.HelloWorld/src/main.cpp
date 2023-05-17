@@ -6,22 +6,69 @@
 
 #define LOG(x) std::cout<< x <<std::endl
 
-namespace apple
+inline namespace apple
 {
 	void print(const std::string& string)
 	{
 		LOG(string);
 	}
+
+	namespace orange
+	{
+		void print(const char* string)
+		{
+			std::string temp = string;
+			std::reverse(temp.begin(), temp.end());
+
+			LOG(temp);
+		}
+	}
 }
 
-namespace orange
+namespace red
 {
-	void print(const char* string)
+	inline namespace blue
 	{
-		std::string temp = string;
-		std::reverse(temp.begin(),temp.end());
+		class One
+		{
+		public:
+			int number1{10};
+		};
+	}
 
-		LOG(temp);
+	namespace blue
+	{
+		class Two
+		{
+		public:
+			int number2{ 20 };
+		};
+	}
+
+	void PrintNumber()
+	{
+		One one;
+		LOG(one.number1);
+		Two two;
+		LOG(two.number2);
+	}
+}
+
+void SetNumber()
+{
+	using namespace red;
+
+	One one;
+	one.number1 = 1;
+	Two two;
+	two.number2 = 2;
+}
+
+namespace apple
+{
+	void GetName()
+	{
+
 	}
 }
 
