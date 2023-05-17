@@ -2058,4 +2058,105 @@ int main()
 
 静态链接在技术上更快,因为编译器或链接器实际上可以执行连接时进行优化。
 
-头文件同时支持静态与动态库
+头文件同时支持静态与动态库.
+
+## 创建与使用库
+
+## 如何处理多返回值
+
+- 通过函数参数传递引用或指针
+
+``` cpp {.line-numbers}
+// 通过函数参数传引用的方式
+void SetBasic(std::string out_Name, int out_Age)
+{
+        out_Name = "cherno";
+        out_Age = 27;
+}
+
+// 通过函数参数传指针的方式
+void SetBasic(std::string* const out_Name, int* const out_Age)
+{
+    *out_Name = std::string("Sadaharu");
+    *out_Age = 22;
+}
+
+int main()
+{
+    std::string m_Name{"Unknow"};
+    int m_Age{ -1 };
+
+    SetBasic(m_Name, m_Age);
+    LOG(m_Name);
+    LOG(m_Age);
+    SetBasic(&m_Name, &m_Age);
+    LOG(m_Name);
+    LOG(m_Age);
+}
+```
+
+缺点:形参太多,降低可读性
+
+- 通过返回值返回一个`array`数组通过`vector`
+
+不同点是`array`是在栈上创建的,速度更快,而`vector`会把它的底层储存在堆上,从技术上来说`array`会更快.
+
+该方法只适用于返回多个相同类型的值.
+
+``` cpp {.line-numbers}
+// 通过数组返回
+std::array<int, 2>SetAge()
+{
+    std::array<int, 2> result;
+
+    result[0] = 27;
+    result[1] = 22;
+
+    return result;
+}
+```
+
+- 使用std::pair返回两个值
+
+可以返回仅两个不同类型的值.
+
+``` cpp {.line-numbers}
+// 使用std::pair返回两个值
+std::pair<bool, int>GetAge(const std::string& name)
+{
+    std::pair<bool, int> result;
+
+    if (name.compare("cherno"))
+    {
+    result = std::make_pair(true, 27);
+    }
+    else
+    {
+    result = std::make_pair(false, -1);
+    }
+}
+```
+
+- 返回一个结构体(推荐)
+
+结构体是在栈上创建的,所以速度也是可以接受的;而且可读性也很好.
+
+``` cpp {.line-numbers}
+// 使用结构体
+struct Entity
+{
+    std::string s_Name;
+    int s_Age;
+};
+
+Entity SetBasic(const std::string& out_Name, const int& out_Age)
+{
+    Entity e;
+
+    e.s_Name = out_Name;
+    e.s_Age = out_Age;
+
+    return e;
+}
+```
+
