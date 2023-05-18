@@ -2547,3 +2547,61 @@ int main()
 
 多线程对于加速程序是十分有用的,线程的主要目的就是优化.
 
+## 计时
+
+我们可以使用计时来观察代码的性能.
+
+``` cpp {.line-numbers}
+int main()
+{
+    using namespace std::literals::chrono_literals;	// 使用1s中的's'
+
+    // 获取当前时间(高精度)
+    std::chrono::time_point<std::chrono::steady_clock> start_a = std::chrono::high_resolution_clock::now();
+    // 类型很长的时候我们可以使用auto关键字
+    auto start = std::chrono::high_resolution_clock::now();
+    std::this_thread::sleep_for(1s); // 计时时间会大于1s,因为计时本身会有性能开销
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float> duration = end - start;
+    LOG(duration.count() << 's');
+
+    std::cin.get();
+}
+```
+
+上述案例我们使用`chrono`类实现了一个比较笨的计时器.
+
+!!!warning
+    在自定义计时器**类,构造函数,析构函数中不要使用auto关键字**,我们应该在构造函数外部提前定义计时器所需要的成员变量.
+
+计时器类
+
+``` cpp {.line-numbers}
+struct Timer
+{
+    std::chrono::time_point<std::chrono::steady_clock> start, end;
+    std::chrono::duration<float> duration;
+
+    Timer()
+        : start(std::chrono::high_resolution_clock::now()) {}
+
+    ~Timer()
+    {
+        end = std::chrono::high_resolution_clock::now();
+
+        duration = end - start;
+        float ms = duration.count() * 1000;
+        LOG(ms << "ms");
+    }
+};
+
+void Function()
+{
+    Timer timer;
+
+    for (unsigned int i = 0; i < 100; i++)
+    {
+        std::cout << i << '\n'; // \n的性能要比std::endl高很多
+    }
+}
+```
