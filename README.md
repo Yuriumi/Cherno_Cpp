@@ -2510,3 +2510,40 @@ void SetNumber()
     two.number2 = 2;
 }
 ```
+
+## 线程
+
+`#include<thread>;`
+
+``` cpp {.line-numbers}
+static bool s_Finished = false;
+
+void DoWork()
+{
+    // 使用sleep_for方法,防止吃满CPU
+    using namespace std::literals::chrono_literals;
+
+    while (!s_Finished)
+    {
+    std::cout << "Working...\n";
+    std::this_thread::sleep_for(1s);
+    }
+}
+
+int main()
+{
+    std::thread worker(DoWork); // 创建线程对象,DoWork是我们在另一个线程中做的事.
+
+    std::cin.get();
+    s_Finished = true;
+
+    worker.join();  // 等待线程执行结束后,才执行后续代码
+
+    LOG("Finished!");
+
+    std::cin.get();
+}
+```
+
+多线程对于加速程序是十分有用的,线程的主要目的就是优化.
+
