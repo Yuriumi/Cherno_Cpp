@@ -27,21 +27,20 @@ struct Timer
 	}
 };
 
+struct Entity
+{
+	int x;
+	int y;
+};
+
 
 int main()
 {
-	std::vector<int> numbers = { 3,5,4,1,2 };
+	Entity e{ 5,8 };
+	int* position = (int*)&e;
 
-	std::sort(numbers.begin(), numbers.end(), [](int a, int b)
-		{
-			if (a == 2)
-				return false;
-			if (b == 2)
-				return true;
+	LOG(position[0] << "," << position[1]);
 
-			return a < b;
-		});
-
-	for (int value : numbers)
-		LOG(value);
+	int y = *(int*)((char*)&e + 4);
+	LOG(y);
 }

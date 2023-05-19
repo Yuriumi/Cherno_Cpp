@@ -2754,3 +2754,41 @@ std::sort(numbers.begin(), numbers.end(), [](int a, int b)
         return a < b;
     });
 ```
+
+## 类型双关
+
+``` cpp {.line-numbers}
+int value_int{ 50 };
+
+double value_double = *(double*)(&value_int);
+
+LOG(value_double);
+```
+
+上述案例我们使用`double`类型来表示`int`,但是这样做是糟糕的,这个过程添加了4个字节用于`double`所需的8字节,输出的结果并不是正确的.
+
+我们还可以使用引用偷一些性能.
+
+``` cpp {.line-numbers}
+int value_int{ 50 };
+
+double& value_double_a = *(double*)(&value_int);
+```
+
+下面这个案例可以更直观的理解类型双关
+
+``` cpp {.line-numbers}
+struct Entity
+{
+    int x;
+    int y;
+};
+
+Entity e{ 5,8 };
+int* position = (int*)&e;   // Entity完全可以使用int数组来表示
+
+LOG(position[0] << "," << position[1]);
+
+int y = *(int*)((char*)&e + 4); // 内存地址计算进行访问
+LOG(y);
+```
