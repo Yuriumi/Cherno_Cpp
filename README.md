@@ -2836,3 +2836,73 @@ std::sort(numbers.begin(), numbers.end(), [](int a, int b)
         return a < b;
     });
 ```
+
+## 联合体
+
+`unio`通常是匿名使用的,但匿名的`union`不能含有成员函数.
+
+可以与类型双关一起使用
+
+`union`的特点是共享内存,可以**像使用结构体或者类一样**使用他们,也可以给他**添加静态函数**或者**普通函数**,方法等.然而**不能使用虚方法**,还有一些其他的限制.
+
+例如空间位置(x,y,z)我们希望他同时也可以表示RGB颜色,那么union可以说是非常好用的.
+
+``` cpp {.line-numbers}
+int main()
+{
+    union
+    {
+        float a;
+        int b;
+    };
+
+    a = 2.0f; // a与b共享一块内存
+
+    LOG(a << "," << b); //int 取了组成浮点数的内存,将他解释成了一个整形.
+}
+```
+
+``` cpp {.line-numbers}
+struct Position
+{
+    int x, y, z;
+};
+
+struct RGB
+{
+    int a;
+
+    union
+    {
+        struct
+        {
+            int r, g, b;
+        };
+        struct
+        {
+            Position p;
+        };
+    };
+};
+
+int main()
+{
+    RGB rgb{ 1,1,1,1 };
+
+    LOG(rgb.r << rgb.g << rgb.b << rgb.a);
+
+    rgb.p = { 2,2,2 };
+
+    LOG(rgb.r << rgb.g << rgb.b << rgb.a);
+}
+
+// 输出
+1,1,1,1
+2,2,2,1
+```
+
+上述案例实现了三个成员变量同时表示了颜色的RGB,与位置坐标信息.
+
+> 评论区
+    `union`里成员共享内存,分配大小是按照最大成员的sizeof进行分配的.视频中两个结构体是两个成员,上述案例中的结构体x->r,y->g,z->b,a不变.
+

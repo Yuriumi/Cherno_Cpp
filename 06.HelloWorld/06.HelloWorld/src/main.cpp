@@ -29,20 +29,45 @@ struct Timer
 	}
 };
 
-struct Entity
+struct Position
 {
-	int x;
-	int y;
+	int x, y, z;
 };
 
+struct RGB
+{
+	int a;
+
+	union
+	{
+		struct
+		{
+			int r, g, b;
+		};
+		struct
+		{
+			Position p;
+		};
+	};
+};
 
 int main()
 {
-	Entity e{ 5,8 };
-	int* position = (int*)&e;
+	union
+	{
+		float a;
+		int b;
+	};
 
-	LOG(position[0] << "," << position[1]);
+	a = 2.0f;	// a与b共享一块内存
 
-	int y = *(int*)((char*)&e + 4);
-	LOG(y);
+	LOG(a << "," << b);	//int 取了组成浮点数的内存,将他解释成了一个整形.
+
+	RGB rgb{ 1,1,1,1 };
+
+	LOG(rgb.r << rgb.g << rgb.b << rgb.a);
+
+	rgb.p = { 2,2,2 };
+
+	LOG(rgb.r << rgb.g << rgb.b << rgb.a);
 }
