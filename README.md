@@ -2709,3 +2709,48 @@ Release模式下
 
 ![array](img/array.jpg)
 
+## 排序
+
+sort排序
+
+``` cpp
+#include <vector>
+#include <algorithm>
+
+std::sort(vector.begin(),vector.end(),排序规则);
+```
+
+默认排序方式为降序.
+
+如果使用内置的排序函数`#include <functional>`
+
+``` cpp
+// 升序
+std::sort(vector.begin(),vector.end(),std::greater<int>());
+```
+
+时使用lambda表达式进行灵活排序
+
+``` cpp {.line-numbers}
+std::sort(vector.begin(),vector.end(),[](int a,int b)
+{
+    return a < b;
+
+    // a < b 如果返回true,a排在前面.此时为升序排列(如果a小于b,那么a就排在b的前面)
+    // a > b 如果返回true,a排在前面,此时为降序排列(如果a大于b,那么a就排在b的前面)
+});
+```
+
+如果我们希望把2排在最后
+
+``` cpp {.line-numbers}
+std::sort(numbers.begin(), numbers.end(), [](int a, int b)
+    {
+        if (a == 2)
+            return false;
+        if (b == 2)
+            return true;
+
+        return a < b;
+    });
+```
