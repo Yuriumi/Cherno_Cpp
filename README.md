@@ -2959,3 +2959,37 @@ int main()
 
 只能在基类中定义虚析构,子类析构才是虚析构,如果二级子类中定义虚析构,编译器不认,且virtual失败.
 
+## 类型转换
+
+C++风格的类型转换分为`static_cast`,`dynamic_cast`,`reinterpret_cast`,`const_cast`
+
+### static_cast
+
+`static_cast`用于进行比较"自然"的,低风险的类型转换,例如C++的基本类型`int`,`float`,...;不能用于指针类型的强制转换.
+
+``` cpp {.line-numbers}
+double dpi = 3.1415926;
+int number = static_cast<int>(dpi);
+double d = 1.1;
+void* p = &d;
+double* dp = static_cast<double*>(p);
+```
+
+### reinterpret_cast
+
+`reinterpret_cast`用于进行各种不同类型的指针之间的强制转换.
+
+> 工作原理与之间所学的类型双关类似,他仅仅是将内存进行重新解释.危险,不推荐
+
+``` cpp {.line-numbers}
+int* ip;
+char* pc = reinterpret_cast<char*>(ip);
+```
+
+### const_cast
+
+通常用于添加或删除const性质.
+
+### dynamic_cast
+
+`dynamic_cast`不检查转换的安全性,进运行时检查,如果不能转换,返回`NULL`

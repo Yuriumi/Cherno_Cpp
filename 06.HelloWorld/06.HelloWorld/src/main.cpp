@@ -60,16 +60,28 @@ public:
 	}
 };
 
+class AnotherClass : public Base
+{
+public:
+	AnotherClass() {}
+	~AnotherClass() {}
+};
+
 int main()
 {
-	Base* base = new Base();
+	double dpi = 3.1415926;
+	int number = static_cast<int>(dpi);
+	double d = 1.1;
+	void* p = &d;
+	double* dp = static_cast<double*>(p);
+
 	Entity* entity = new Entity();
+	Base* base = entity;
 
-	delete base;
-	delete entity;
+	AnotherClass* ac = dynamic_cast<AnotherClass*>(base);
 
-	std::cout << "============================\n";
-
-	Base* poly = new Entity();
-	delete poly;	// 这里我们调用的是Base的析构函数,Entity对象中的成员变量并未删除会一直存在在内存中
+	if (ac)
+	{
+		LOG("Cast");
+	}
 }
