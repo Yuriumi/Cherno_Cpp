@@ -2993,3 +2993,10 @@ char* pc = reinterpret_cast<char*>(ip);
 ### dynamic_cast
 
 `dynamic_cast`不检查转换的安全性,进运行时检查,如果不能转换,返回`NULL`
+
+## 条件操作与断点
+
+## 现代C++中的安全
+
+生产环境使用智能指针,学习和了解工作积累使用原始指针.
+
