@@ -2906,3 +2906,56 @@ int main()
 > 评论区
     `union`里成员共享内存,分配大小是按照最大成员的sizeof进行分配的.视频中两个结构体是两个成员,上述案例中的结构体x->r,y->g,z->b,a不变.
 
+## 虚析构函数
+
+虚析构函数可以帮助我们更好的实现多态,在继承关系中如果基类的析构函数不为虚函数,那么派生类存于基类指针时,派生类的析构函数将无法调用,会造成内存泄露.
+
+``` cpp {.line-numbers}
+class Base
+{
+public:
+    Base()
+    {
+        std::cout << "Created Base!\n";
+    }
+    ~Base()
+    {
+        std::cout << "Destory Base\n";
+    }
+};
+
+class Entity : public Base
+{
+private:
+    int* m_array;
+
+public:
+    Entity()
+    {
+        m_array = new int[5];
+        std::cout << "Created Entity!\n";
+    }
+    ~Entity()
+    {
+        delete[] m_array;
+        std::cout << "Destory Entity!\n";
+    }
+};
+
+int main()
+{
+    Base* base = new Base();
+    Entity* entity = new Entity();
+
+    delete base;
+    delete entity;
+
+    Base* poly = new Entity();
+    delete poly; // 这里我们调用的是Base的析构函数,Entity对象中的成员变量并未删除会一直存在在内存中
+}
+```
+
+我们将基类的析构函数标记为虚函数,在派生类中复写可解决问题.
+
+只能在基类中定义虚析构,子类析构才是虚析构,如果二级子类中定义虚析构,编译器不认,且virtual失败.
+

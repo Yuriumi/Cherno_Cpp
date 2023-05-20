@@ -29,45 +29,47 @@ struct Timer
 	}
 };
 
-struct Position
+class Base
 {
-	int x, y, z;
+public:
+	Base()
+	{
+		std::cout << "Created Base!\n";
+	}
+	virtual ~Base()
+	{
+		std::cout << "Destory Base\n";
+	}
 };
 
-struct RGB
+class Entity : public Base
 {
-	int a;
+private:
+	int* m_array;
 
-	union
+public:
+	Entity()
 	{
-		struct
-		{
-			int r, g, b;
-		};
-		struct
-		{
-			Position p;
-		};
-	};
+		m_array = new int[5];
+		std::cout << "Created Entity!\n";
+	}
+	~Entity()
+	{
+		delete[] m_array;
+		std::cout << "Destory Entity!\n";
+	}
 };
 
 int main()
 {
-	union
-	{
-		float a;
-		int b;
-	};
+	Base* base = new Base();
+	Entity* entity = new Entity();
 
-	a = 2.0f;	// a与b共享一块内存
+	delete base;
+	delete entity;
 
-	LOG(a << "," << b);	//int 取了组成浮点数的内存,将他解释成了一个整形.
+	std::cout << "============================\n";
 
-	RGB rgb{ 1,1,1,1 };
-
-	LOG(rgb.r << rgb.g << rgb.b << rgb.a);
-
-	rgb.p = { 2,2,2 };
-
-	LOG(rgb.r << rgb.g << rgb.b << rgb.a);
+	Base* poly = new Entity();
+	delete poly;	// 这里我们调用的是Base的析构函数,Entity对象中的成员变量并未删除会一直存在在内存中
 }
